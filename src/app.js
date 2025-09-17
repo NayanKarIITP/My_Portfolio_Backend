@@ -20,7 +20,7 @@ const app = express();
 
 // --- CORS Configuration ---
 app.use(cors({
-    origin: 'http://localhost:3000', 
+    origin: ['http://35.154.177.95', 'http://localhost:3000'], 
     credentials: true,
 }));
 app.use(express.json());
@@ -30,6 +30,10 @@ const messageRoutes = require('./routes/message.js');
 // Register the message routes.
 app.use('/api/messages', messageRoutes);
 
+// Root test route
+app.get('/', (req, res) => {
+  res.send('Backend server is running 🚀');
+});
 // --- Database Connection & Server Startup ---
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;

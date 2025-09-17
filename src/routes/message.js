@@ -3,6 +3,11 @@ const router = express.Router();
 // Path updated to correctly locate the model from within the src directory
 const Message = require('../model/message'); 
 
+
+router.get('/', (req, res) => {
+    res.json({ success: true, msg: "Messages API is working!" });
+});
+
 router.post('/', async (req, res) => {
     try {
         // Destructure name, email, and message from the request body
