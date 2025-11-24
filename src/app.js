@@ -1,46 +1,40 @@
-
 // --- Package Imports ---
-const path = require('path'); 
-
-// Configure and load environment variables from the .env file
-const dotenvResult = require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
-
-// If dotenv encounters an error, log it and exit
-if (dotenvResult.error) {
-    console.error('Error loading .env file:', dotenvResult.error);
-    process.exit(1);
-}
+require('dotenv').config(); // <-- FIXED: loads Render env vars automatically
 
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const path = require('path');
 
 // --- Express App Initialization ---
 const app = express();
 
 // --- CORS Configuration ---
 app.use(cors({
-    origin: ['http://35.154.177.95', 'http://localhost:3000'], 
+    origin: [
+        'http://35.154.177.95',
+        'http://localhost:3000',
+        'https://your-frontend-url.vercel.app'
+    ],
     credentials: true,
 }));
 app.use(express.json());
 
+// Routes
 const messageRoutes = require('./routes/message.js'); 
-
-// Register the message routes.
 app.use('/api/messages', messageRoutes);
 
 // Root test route
 app.get('/', (req, res) => {
   res.send('Backend server is running 🚀');
 });
+
 // --- Database Connection & Server Startup ---
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
 
-// Explicitly check if the MONGO_URI was loaded before trying to connect
 if (!MONGO_URI) {
-    console.error("FATAL ERROR: MONGO_URI is not defined. Please check your .env file for formatting errors.");
+    console.error("FATAL ERROR: MONGO_URI is not defined.");
     process.exit(1);
 }
 
