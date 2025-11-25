@@ -14,7 +14,7 @@ app.use(cors({
     origin: [
         'http://35.154.177.95',
         'http://localhost:3000',
-        'https://your-frontend-url.vercel.app'
+        '"https://my-portfolio-frontend-five-steel.vercel.app" '
     ],
     credentials: true,
 }));
