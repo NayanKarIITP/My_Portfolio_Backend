@@ -1,49 +1,42 @@
-// --- Package Imports ---
-require('dotenv').config(); // <-- FIXED: loads Render env vars automatically
+require('dotenv').config(); 
 
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const path = require('path');
 
-// --- Express App Initialization ---
 const app = express();
 
-// --- CORS Configuration ---
 app.use(cors({
     origin: [
-        'http://35.154.177.95',
-        'http://localhost:3000',
-        '"https://my-portfolio-frontend-five-steel.vercel.app" '
+        "http://localhost:3000",
+        "https://my-portfolio-frontend-five-steel.vercel.app"   // your real Vercel domain
     ],
     credentials: true,
 }));
+
 app.use(express.json());
 
-// Routes
-const messageRoutes = require('./routes/message.js'); 
+const messageRoutes = require('./routes/message');
 app.use('/api/messages', messageRoutes);
 
-// Root test route
 app.get('/', (req, res) => {
   res.send('Backend server is running 🚀');
 });
 
-// --- Database Connection & Server Startup ---
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
 
 if (!MONGO_URI) {
-    console.error("FATAL ERROR: MONGO_URI is not defined.");
+    console.error("MONGO_URI is missing");
     process.exit(1);
 }
 
 mongoose.connect(MONGO_URI)
     .then(() => {
-        console.log("MongoDB connected successfully");
+        console.log("MongoDB connected");
         app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
     })
     .catch(err => {
-        console.error("Failed to connect to MongoDB", err);
+        console.error("MongoDB connection failed", err);
         process.exit(1);
     });
